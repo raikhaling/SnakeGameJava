@@ -19,7 +19,7 @@ public class GamePanel extends JPanel implements ActionListener{
 	int bodyParts = 6;
 	int applesEaten;
 	int appleX;
-	int appleY;
+	int appleY; 
 	char direction = 'R';
 	boolean running =false;
 	Timer timer;
@@ -36,14 +36,20 @@ public class GamePanel extends JPanel implements ActionListener{
 	public void startGame() {
 		newApple(); //as game starts we create a new apple
 		running = true;
-		timer = new Timer(DELAY, this);
+		timer = new Timer(DELAY, this); 
 		timer.start();
 	}
-	public void paintComponents(Graphics g) {
-		super.paintComponents(g);
-		draw(g);
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		draw(g); 
 	}
 	public void draw(Graphics g) {
+		//drawing matrix for visualization
+		for(int i = 0;i < SCREEN_HEIGHT/UNIT_SIZE; i++) {
+			g.setColor(Color.blue);
+			g.drawLine(i*UNIT_SIZE, 0, i*UNIT_SIZE, SCREEN_HEIGHT);
+			g.drawLine(0, i*UNIT_SIZE, SCREEN_WIDTH, i*UNIT_SIZE);
+		}  
 		
 	}
 	public void newApple() { 
