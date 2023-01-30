@@ -4,7 +4,7 @@ public class SnakeMain {
 //		GameFrame frame = new GameFrame();
 //		but if u dont plan to use frame i.e just need and instance we can do
 		new GameFrame();
-		
+		System.out.println("Main");
 		
 	}
 }
