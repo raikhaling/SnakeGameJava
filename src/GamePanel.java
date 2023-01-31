@@ -1,9 +1,13 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
 import javax.swing.*;
 import java.util.Random;
 
@@ -49,26 +53,36 @@ public class GamePanel extends JPanel implements ActionListener{
 		draw(g); 
 	}
 	public void draw(Graphics g) {
-		//drawing matrix for visualization
-		for(int i = 0;i < SCREEN_HEIGHT/UNIT_SIZE; i++) {
-			g.setColor(Color.blue);
-			g.drawLine(i*UNIT_SIZE, 0, i*UNIT_SIZE, SCREEN_HEIGHT);
-			g.drawLine(0, i*UNIT_SIZE, SCREEN_WIDTH, i*UNIT_SIZE);			 
-		} 
-		//draw apple
-		g.setColor(Color.red);
-		g.fillOval(appleX, appleY, UNIT_SIZE, UNIT_SIZE);
-		
-		//draw snake
-		for (int i = 0; i < bodyParts; i++) {
-			if(i == 0) { //head part
-				g.setColor(Color.green);
-				g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
+		if(running) {
+			//drawing matrix for visualization
+			for(int i = 0;i < SCREEN_HEIGHT/UNIT_SIZE; i++) {
+				g.setColor(Color.blue);
+				g.drawLine(i*UNIT_SIZE, 0, i*UNIT_SIZE, SCREEN_HEIGHT);
+				g.drawLine(0, i*UNIT_SIZE, SCREEN_WIDTH, i*UNIT_SIZE);			 
+			} 
+			//draw apple
+			g.setColor(Color.red);
+			g.fillOval(appleX, appleY, UNIT_SIZE, UNIT_SIZE);
+			
+			//draw snake
+			for (int i = 0; i < bodyParts; i++) {
+				if(i == 0) { //head part
+					g.setColor(Color.green);
+					g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
+				}
+				else {
+					g.setColor(new Color(45, 180, 0));
+					//g.setColor(new Color(random.nextInt(255),random.nextInt(255),random.nextInt(255)));
+					g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
+				}
 			}
-			else {
-				g.setColor(new Color(45, 180, 0));
-				g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
-			}
+			g.setColor(Color.red);
+			g.setFont(new Font("Ink Free", Font.BOLD, 35));
+			FontMetrics metrics = getFontMetrics(g.getFont());
+			g.drawString("Score: "+applesEaten,(SCREEN_WIDTH - metrics.stringWidth("Score: "+applesEaten))/2, g.getFont().getSize());
+		}
+		else {
+			gameOver(g);
 		}
 		
 	}
@@ -105,6 +119,11 @@ public class GamePanel extends JPanel implements ActionListener{
 		
 	}
 	public void checkApple() {
+		if((x[0] == appleX) && (y[0] == appleY)) {
+			bodyParts++;
+			applesEaten++;
+			newApple();
+		}
 		
 	}
 	public void checkCollisions() {
@@ -138,8 +157,17 @@ public class GamePanel extends JPanel implements ActionListener{
 			timer.stop();
 		}
 	}
-	public void gameOver() {
-		
+	public void gameOver(Graphics g) {
+		//score
+		g.setColor(Color.red);
+		g.setFont(new Font("Ink Free", Font.BOLD, 35));
+		FontMetrics metrics = getFontMetrics(g.getFont());
+		g.drawString("Score: "+applesEaten,(SCREEN_WIDTH - metrics.stringWidth("Score: "+applesEaten))/2, g.getFont().getSize());
+		//Game Over Text
+		g.setColor(Color.red);
+		g.setFont(new Font("Ink Free", Font.BOLD, 75));
+		FontMetrics metrics1 = getFontMetrics(g.getFont());
+		g.drawString("Game Over",(SCREEN_WIDTH - metrics1.stringWidth("Game Over"))/2,SCREEN_HEIGHT/2)  ;
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -152,6 +180,45 @@ public class GamePanel extends JPanel implements ActionListener{
 		repaint();
 	}
 	public class MyKeyAdapter extends KeyAdapter{
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			super.keyTyped(e);
+		}
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+			switch(e.getKeyCode()) {
+			case KeyEvent.VK_LEFT:
+				  if(direction != 'R') {
+					  direction = 'L';
+				  }
+				  break;
+			case KeyEvent.VK_RIGHT:
+				  if(direction != 'L') {
+					  direction = 'R';
+				  }
+				  break;
+			case KeyEvent.VK_UP:
+				  if(direction != 'D') {
+					  direction = 'U';
+				  }
+				  break;
+			case KeyEvent.VK_DOWN:
+				  if(direction != 'U') {
+					  direction = 'D';
+				  }
+				  break;
+			}
+			
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
+			super.keyReleased(e);
+		}
 		
 	}
 
