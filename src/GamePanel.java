@@ -15,12 +15,12 @@ public class GamePanel extends JPanel implements ActionListener{
 
 	static final int SCREEN_WIDTH = 600;
 	static final int SCREEN_HEIGHT = 600;
-	static final int UNIT_SIZE = 25;
+	static final int UNIT_SIZE = 15;
 	static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT)/UNIT_SIZE;
 	static final int DELAY = 75;
 	final int x[] = new int[GAME_UNITS];
 	final int y[] = new int[GAME_UNITS];
-	int bodyParts = 6;
+	int bodyParts = 4;
 	int applesEaten;
 	int appleX;
 	int appleY; 
@@ -52,14 +52,15 @@ public class GamePanel extends JPanel implements ActionListener{
 		super.paintComponent(g);
 		draw(g); 
 	}
+	
 	public void draw(Graphics g) {
 		if(running) {
 			//drawing matrix for visualization
-			for(int i = 0;i < SCREEN_HEIGHT/UNIT_SIZE; i++) {
-				g.setColor(Color.blue);
-				g.drawLine(i*UNIT_SIZE, 0, i*UNIT_SIZE, SCREEN_HEIGHT);
-				g.drawLine(0, i*UNIT_SIZE, SCREEN_WIDTH, i*UNIT_SIZE);			 
-			} 
+//			for(int i = 0;i < SCREEN_HEIGHT/UNIT_SIZE; i++) {
+//				g.setColor(Color.blue);
+//				g.drawLine(i*UNIT_SIZE, 0, i*UNIT_SIZE, SCREEN_HEIGHT);
+//				g.drawLine(0, i*UNIT_SIZE, SCREEN_WIDTH, i*UNIT_SIZE);			 
+//			} 
 			//draw apple
 			g.setColor(Color.red);
 			g.fillOval(appleX, appleY, UNIT_SIZE, UNIT_SIZE);
@@ -72,10 +73,11 @@ public class GamePanel extends JPanel implements ActionListener{
 				}
 				else {
 					g.setColor(new Color(45, 180, 0));
-					//g.setColor(new Color(random.nextInt(255),random.nextInt(255),random.nextInt(255)));
+					g.setColor(new Color(random.nextInt(255),random.nextInt(255),random.nextInt(255)));
 					g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
 				}
 			}
+			//apples eaten score
 			g.setColor(Color.red);
 			g.setFont(new Font("Ink Free", Font.BOLD, 35));
 			FontMetrics metrics = getFontMetrics(g.getFont());
@@ -136,7 +138,8 @@ public class GamePanel extends JPanel implements ActionListener{
 		
 		//check if head touches left border
 		if(x[0] < 0) {
-			running = false;
+		//	running = false;
+			x[0] = SCREEN_WIDTH;
 		}
 		
 		//check if head touches right border
@@ -167,7 +170,7 @@ public class GamePanel extends JPanel implements ActionListener{
 		g.setColor(Color.red);
 		g.setFont(new Font("Ink Free", Font.BOLD, 75));
 		FontMetrics metrics1 = getFontMetrics(g.getFont());
-		g.drawString("Game Over",(SCREEN_WIDTH - metrics1.stringWidth("Game Over"))/2,SCREEN_HEIGHT/2)  ;
+		g.drawString("Game Over",(SCREEN_WIDTH - metrics1 .stringWidth("Game Over"))/2,SCREEN_HEIGHT/2)  ;
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
